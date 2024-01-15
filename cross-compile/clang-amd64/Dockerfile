@@ -11,7 +11,7 @@ RUN dpkg --add-architecture amd64 && \
     apt-get update
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        clang cmake lld ninja-build libstdc++-13-dev:amd64
+        clang cmake lld ninja-build libstdc++-12-dev:amd64
 
 RUN ln -sf /usr/bin/ld.lld /usr/bin/ld
 

@@ -20,8 +20,8 @@ steps:
         - "UBUNTU_VERSION=${UBUNTU_VERSION}"
   test:
     image: git.jcm.re/jcm/cross-compile-clang-amd64:${UBUNTU_VERSION}
+    pull: true
     commands:
-      - env
       - clang --version
       - clang++ --version
       - cd cross-compile/clang-amd64/test
