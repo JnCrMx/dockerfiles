@@ -1,0 +1,33 @@
+matrix:
+  UBUNTU_VERSION:
+    - jammy
+    - mantic
+
+steps:
+  docker:
+    image: plugins/kaniko
+    settings:
+      username: jcm
+      password:
+        from_secret: docker_password
+      repo: git.jcm.re/jcm/cross-compile-clang-amd64
+      registry: git.jcm.re
+      tags: "${UBUNTU_VERSION}"
+      snapshot-mode: redo
+      context: cross-compile/clang-amd64
+      dockerfile: cross-compile/clang-amd64/Dockerfile
+      build_args:
+        - "UBUNTU_VERSION=${UBUNTU_VERSION}"
+  test:
+    image: git.jcm.re/jcm/cross-compile-clang-amd64:${UBUNTU_VERSION}
+    commands:
+      - env
+      - clang --version
+      - clang++ --version
+      - cd cross-compile/clang-amd64/test
+      - cmake -B build
+      - cmake --build build
+
+when:
+  - path: "cross-compile/clang-amd64/*"
+  - path: ".woodpecker/cross-compile.yml"

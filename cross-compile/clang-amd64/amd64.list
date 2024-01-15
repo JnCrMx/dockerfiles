@@ -1,0 +1,4 @@
+deb [arch=amd64] http://de.archive.ubuntu.com/ubuntu UBUNTU_VERSION-updates main restricted
+deb [arch=amd64] http://de.archive.ubuntu.com/ubuntu UBUNTU_VERSION universe
+deb [arch=amd64] http://de.archive.ubuntu.com/ubuntu UBUNTU_VERSION-updates universe
+deb [arch=amd64] http://de.archive.ubuntu.com/ubuntu UBUNTU_VERSION main restricted
