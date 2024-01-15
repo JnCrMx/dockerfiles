@@ -9,7 +9,7 @@ steps:
     settings:
       username: jcm
       password:
-        from_secret: docker_password
+        from_secret: gitea_package_token
       repo: git.jcm.re/jcm/cross-compile-clang-amd64
       registry: git.jcm.re
       tags: "${UBUNTU_VERSION}"
