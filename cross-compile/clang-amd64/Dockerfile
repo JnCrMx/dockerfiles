@@ -10,7 +10,8 @@ RUN dpkg --add-architecture amd64 && \
     sed -i "s/UBUNTU_VERSION/"${UBUNTU_VERSION}"/" /etc/apt/sources.list.d/amd64.list
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        clang cmake lld ninja-build libstdc++-12-dev:amd64 && \
+        clang cmake lld ninja-build libstdc++-12-dev:amd64 \
+        git patch ssh-client ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
 RUN ln -sf /usr/bin/ld.lld /usr/bin/ld
