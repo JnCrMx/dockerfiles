@@ -20,7 +20,11 @@ RUN apt-get update && \
         git patch ssh-client ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
-RUN ln -sf /usr/bin/ld.lld /usr/bin/ld
+RUN ln -sf /usr/bin/ld.lld-${LLVM_VERSION} /usr/bin/ld && \
+    ln -sf /usr/bin/clang-${LLVM_VERSION} /usr/bin/clang && \
+    ln -sf /usr/bin/clang++-${LLVM_VERSION} /usr/bin/clang++ && \
+    ln -sf /usr/bin/clang-${LLVM_VERSION} /usr/bin/cc && \
+    ln -sf /usr/bin/clang++-${LLVM_VERSION} /usr/bin/c++
 
 COPY toolchain.cmake /toolchain.cmake
 
