@@ -11,7 +11,7 @@ RUN dpkg --add-architecture amd64 && \
     sed -i "s/UBUNTU_VERSION/"${UBUNTU_VERSION}"/" /etc/apt/sources.list.d/amd64.list
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        ca-certificates wget && \
+        ca-certificates wget gnupg && \
     wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
     echo "deb [arch=arm64] http://apt.llvm.org/"${UBUNTU_VERSION}"/ llvm-toolchain-"${UBUNTU_VERSION}"-"${LLVM_VERSION}" main" > /etc/apt/sources.list.d/llvm.list && \
     apt-get update && \
