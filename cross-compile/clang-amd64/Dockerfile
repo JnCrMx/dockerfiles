@@ -18,15 +18,13 @@ RUN apt-get update && \
     echo "deb [arch=arm64] http://apt.llvm.org/"${UBUNTU_VERSION}"/ llvm-toolchain-"${UBUNTU_VERSION}" main" > /etc/apt/sources.list.d/llvm.list && \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        clang-${LLVM_VERSION} lld-${LLVM_VERSION} cmake ninja-build libstdc++-12-dev:amd64 \
+        clang lld cmake ninja-build libstdc++-12-dev:amd64 \
         git patch ssh-client ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
-RUN ln -sf /usr/bin/ld.lld-${LLVM_VERSION} /usr/bin/ld && \
-    ln -sf /usr/bin/clang-${LLVM_VERSION} /usr/bin/clang && \
-    ln -sf /usr/bin/clang++-${LLVM_VERSION} /usr/bin/clang++ && \
-    ln -sf /usr/bin/clang-${LLVM_VERSION} /usr/bin/cc && \
-    ln -sf /usr/bin/clang++-${LLVM_VERSION} /usr/bin/c++
+RUN ln -sf /usr/bin/ld.lld /usr/bin/ld && \
+    ln -sf /usr/bin/clang /usr/bin/cc && \
+    ln -sf /usr/bin/clang++ /usr/bin/c++
 
 COPY toolchain.cmake /toolchain.cmake
 
