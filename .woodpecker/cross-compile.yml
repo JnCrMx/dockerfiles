@@ -2,7 +2,6 @@ matrix:
   UBUNTU_VERSION:
     - jammy
     - mantic
-    - noble
 
 steps:
   docker:
