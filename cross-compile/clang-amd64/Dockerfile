@@ -12,7 +12,8 @@ RUN dpkg --add-architecture amd64 && \
     fi && \
     sed -i 's/^deb/deb [arch=arm64]/' /etc/apt/sources.list && \
     sed -i "s/UBUNTU_VERSION/"${UBUNTU_VERSION}"/" /etc/apt/sources.list.d/amd64.list
-RUN apt-get update && apt-get upgrade && \
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get upgrade -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         ca-certificates wget gnupg && \
     if [ "${UBUNTU_VERSION}" != "noble" ]; then \
