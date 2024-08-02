@@ -1,7 +1,7 @@
-ARG UBUNTU_VERSION=mantic
+ARG UBUNTU_VERSION=noble
 
 FROM ubuntu:${UBUNTU_VERSION}
-ARG UBUNTU_VERSION=mantic
+ARG UBUNTU_VERSION=noble
 ARG LLVM_VERSION=17
 
 COPY amd64.list /etc/apt/sources.list.d/amd64.list
@@ -16,11 +16,9 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get upgrade -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         ca-certificates wget gnupg && \
-    if [ "${UBUNTU_VERSION}" != "noble" ]; then \
         wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
         echo "deb [arch=arm64] http://apt.llvm.org/"${UBUNTU_VERSION}"/ llvm-toolchain-"${UBUNTU_VERSION}"-"${LLVM_VERSION}" main" > /etc/apt/sources.list.d/llvm.list && \
-        apt-get update; \
-    fi && \
+        apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         clang-${LLVM_VERSION} lld-${LLVM_VERSION} cmake ninja-build libstdc++-12-dev:amd64 \
         git patch ssh-client ca-certificates && \
