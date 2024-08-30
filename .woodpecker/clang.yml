@@ -1,0 +1,39 @@
+matrix:
+  UBUNTU_VERSION:
+    - jammy
+    - noble
+  LLVM_VERSION:
+    - 17
+    - 18
+    - 19
+
+steps:
+  docker:
+    image: plugins/kaniko
+    settings:
+      username: jcm
+      password:
+        from_secret: gitea_package_token
+      repo: git.jcm.re/jcm/clang
+      registry: git.jcm.re
+      tags: "${UBUNTU_VERSION}-${LLVM_VERSION}"
+      snapshot-mode: redo
+      context: clang/
+      dockerfile: clang/Dockerfile
+      build_args:
+        - "UBUNTU_VERSION=${UBUNTU_VERSION}"
+        - "LLVM_VERSION=${LLVM_VERSION}"
+  test:
+    image: git.jcm.re/jcm/clang:${UBUNTU_VERSION}-${LLVM_VERSION}
+    pull: true
+    commands:
+      - clang --version
+      - clang++ --version
+      - cd test/clang
+      - cmake -B build
+      - cmake --build build
+      - ./build/my_test
+
+when:
+  - path: "clang/*"
+  - path: ".woodpecker/clang.yml"
