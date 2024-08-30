@@ -4,6 +4,7 @@ matrix:
     - noble
   LLVM_VERSION:
     - 17
+    - 18
     - 19
 
 steps:
