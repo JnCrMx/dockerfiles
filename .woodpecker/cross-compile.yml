@@ -28,7 +28,7 @@ steps:
     commands:
       - clang --version
       - clang++ --version
-      - cd cross-compile/clang-amd64/test
+      - cd test/cpp
       - cmake -B build
       - cmake --build build
 

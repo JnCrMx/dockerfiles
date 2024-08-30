@@ -29,7 +29,7 @@ steps:
     commands:
       - clang --version
       - clang++ --version
-      - cd test/clang
+      - cd test/cpp
       - cmake -B build
       - cmake --build build
       - ./build/my_test
