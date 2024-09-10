@@ -15,7 +15,7 @@ steps:
         from_secret: gitea_package_token
       repo: git.jcm.re/jcm/cross-compile-clang-amd64
       registry: git.jcm.re
-      tags: "${UBUNTU_VERSION}-${LLVM_VERSION}"
+      tags: "${LLVM_VERSION}-${UBUNTU_VERSION}"
       snapshot-mode: redo
       context: cross-compile/clang-amd64
       dockerfile: cross-compile/clang-amd64/Dockerfile
@@ -23,7 +23,7 @@ steps:
         - "UBUNTU_VERSION=${UBUNTU_VERSION}"
         - "LLVM_VERSION=${LLVM_VERSION}"
   test:
-    image: git.jcm.re/jcm/cross-compile-clang-amd64:${UBUNTU_VERSION}-${LLVM_VERSION}
+    image: git.jcm.re/jcm/cross-compile-clang-amd64:${LLVM_VERSION}-${UBUNTU_VERSION}
     pull: true
     commands:
       - clang --version
