@@ -5,6 +5,7 @@ matrix:
   LLVM_VERSION:
     - 17
     - 19
+    - 20
 
 steps:
   docker:
