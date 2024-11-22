@@ -11,8 +11,9 @@ RUN mkdir -p /opt/gowin/license-server && cd /opt/gowin/license-server && \
     rm /tmp/gowin-license-server.zip
 
 RUN chmod +x "/opt/gowin/license-server/bin/license_server"
-RUN --mount=target=/build,source=build \
-    BINS="/opt/gowin/license-server/bin/license_server /opt/gowin/IDE/bin/gw_sh" \
+
+ADD build/box64.sh /build/box64.sh
+RUN BINS="/opt/gowin/license-server/bin/license_server /opt/gowin/IDE/bin/gw_sh" \
     OUT="/opt/gowin/bin" \
     /build/box64.sh
 
