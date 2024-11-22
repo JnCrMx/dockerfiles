@@ -13,5 +13,6 @@ steps:
       dockerfile: fpga/gowin/Dockerfile
 
 when:
-  - path: "fpga/gowin/*"
+  - path: "fpga/gowin/Dockerfile"
+  - path: "fpga/gowin/build/box64.sh"
   - path: ".woodpecker/fpga-gowin.yml"
