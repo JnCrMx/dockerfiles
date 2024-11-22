@@ -1,0 +1,24 @@
+FROM ubuntu:noble
+
+ARG TARGETARCH
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y libglib2.0-0 libfontconfig1 libfreetype6 unzip && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+ADD https://www.gowinsemi.com/upload/database_doc/1863/document/62ec7b56e4ec9.zip /tmp/gowin-license-server.zip
+RUN mkdir -p /opt/gowin/license-server && cd /opt/gowin/license-server && \
+    unzip /tmp/gowin-license-server.zip && \
+    rm /tmp/gowin-license-server.zip
+
+RUN chmod +x "/opt/gowin/license-server/bin/license_server"
+RUN --mount=target=/build,source=build \
+    BINS="/opt/gowin/license-server/bin/license_server /opt/gowin/IDE/bin/gw_sh" \
+    OUT="/opt/gowin/bin" \
+    /build/box64.sh
+
+ADD license-server.sh /entrypoint.sh
+
+ENV PATH="/opt/gowin/bin:${PATH}"
+ENV LD_PRELOAD="/usr/lib/\${PLATFORM}-linux-gnu/libfreetype.so.6"
+
+ENTRYPOINT ["/entrypoint.sh"]

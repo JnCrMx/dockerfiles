@@ -1,0 +1,19 @@
+steps:
+  docker:
+    image: plugins/kaniko
+    settings:
+      username: jcm
+      password:
+        from_secret: gitea_package_token
+      repo: git.jcm.re/jcm/gowin-eda-license-server
+      registry: git.jcm.re
+      tags: latest
+      snapshot-mode: redo
+      context: fpga/gowin/
+      dockerfile: fpga/gowin/Dockerfile.license-server
+
+when:
+  - path: "fpga/gowin/Dockerfile.license-server"
+  - path: "fpga/gowin/build/box64.sh"
+  - path: "fpga/gowin/license-server.sh"
+  - path: ".woodpecker/fpga-gowin-license-server.yml"
