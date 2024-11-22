@@ -4,7 +4,8 @@ set -eu
 
 mkdir -p "$OUT"/
 
-if ! [ "$TARGETARCH" = "amd64" ] ; then
+ARCH=$(arch)
+if ! [ "$ARCH" = "amd64" ] ; then
     apt-get update
     DEBIAN_FRONTEND=noninteractive apt-get install -y box64
 
