@@ -1,0 +1,17 @@
+steps:
+  docker:
+    image: plugins/kaniko
+    settings:
+      username: jcm
+      password:
+        from_secret: gitea_package_token
+      repo: git.jcm.re/jcm/gowin-eda
+      registry: git.jcm.re
+      tags: "V1.9.10.03"
+      snapshot-mode: redo
+      context: fpga/gowin/
+      dockerfile: fpga/gowin/Dockerfile
+
+when:
+  - path: "fpga/gowin/*"
+  - path: ".woodpecker/fpga-gowin.yml"
