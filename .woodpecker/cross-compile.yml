@@ -1,7 +1,6 @@
 matrix:
   UBUNTU_VERSION:
     - jammy
-    - mantic
     - noble
   LLVM_VERSION:
     - 17
