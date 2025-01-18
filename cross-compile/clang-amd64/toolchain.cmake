@@ -15,7 +15,7 @@ SET(CMAKE_CXX_COMPILER_TARGET ${CLANG_TARGET_TRIPLE})
 
 # Package config
 SET(CMAKE_LIBRARY_ARCHITECTURE x86_64-linux-gnu)
-SET(ENV{PKG_CONFIG_PATH} /usr/lib/x86_64-linux-gnu/pkgconfig/)
+SET(ENV{PKG_CONFIG_PATH} /usr/lib/x86_64-linux-gnu/pkgconfig/:$ENV{PKG_CONFIG_PATH})
 
 # Some misc stuff
 SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE amd64)
