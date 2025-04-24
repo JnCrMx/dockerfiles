@@ -1,0 +1,27 @@
+variables:
+  - &buildx_plugin 'docker.io/woodpeckerci/plugin-docker-buildx:5.2.1'
+  - &platforms 'linux/arm64'
+  - &repositories ['git.jcm.re/jcm/snapcraft']
+  - publish_logins: &publish_logins
+      - registry: https://git.jcm.re
+        username:
+          from_secret: gitea_package_user
+        password:
+          from_secret: gitea_package_token
+
+when:
+  - event: push
+    path: "snapcraft/core24/*"
+  - event: push
+    path: ".woodpecker/snapcraft-core24.yml"
+
+steps:
+  docker:
+    image: *buildx_plugin
+    settings:
+      repo: *repositories
+      context: snapcraft/core24
+      dockerfile: snapcraft/core24/Dockerfile
+      platforms: *platforms
+      tag: ["core24-stable", "core24"]
+      logins: *publish_logins
