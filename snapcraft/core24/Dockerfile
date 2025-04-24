@@ -1,6 +1,6 @@
 FROM ubuntu:jammy AS builder
 ENV DEBIAN_FRONTEND=noninteractive
-ARG ARCH
+ARG TARGETARCH
 
 # Grab dependencies
 RUN apt-get update
@@ -13,10 +13,10 @@ RUN apt-get install --yes \
 ADD ./snap-install.sh /usr/bin/snap-install.sh
 
 # download and extract core22 (required for snapcraft to run)
-RUN ARCH=$ARCH snap-install.sh core22
+RUN ARCH=$TARGETARCH snap-install.sh core22
 
 # download and extract snapcraft
-RUN ARCH=$ARCH snap-install.sh snapcraft
+RUN ARCH=$TARGETARCH snap-install.sh snapcraft
 
 # Fix Python3 installation: Make sure we use the interpreter from
 # the snapcraft snap:
@@ -32,7 +32,7 @@ RUN echo 'exec "/snap/snapcraft/current/bin/python3" -m snapcraft "$@"' >> /snap
 RUN chmod +x /snap/bin/snapcraft
 
 # download and extract core24
-RUN ARCH=$ARCH snap-install.sh core24
+RUN ARCH=$TARGETARCH snap-install.sh core24
 
 FROM ubuntu:noble
 ENV DEBIAN_FRONTEND=noninteractive
