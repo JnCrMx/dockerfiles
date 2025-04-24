@@ -10,17 +10,13 @@ RUN apt-get install --yes \
       jq \
       squashfs-tools
 
+ADD ./snap-install.sh /usr/bin/snap-install.sh
+
 # download and extract core22 (required for snapcraft to run)
-RUN curl -L $(curl -H 'X-Ubuntu-Series: 16' -H "X-Ubuntu-Architecture: $ARCH" \
-    'https://api.snapcraft.io/api/v1/snaps/details/core22' | jq '.download_url' -r) --output core22.snap
-RUN mkdir -p /snap/core22
-RUN unsquashfs -d /snap/core22/current core22.snap
+RUN ARCH=$ARCH snap-install.sh core22
 
 # download and extract snapcraft
-RUN curl -L $(curl -H 'X-Ubuntu-Series: 16' -H "X-Ubuntu-Architecture: $ARCH" \
-    'https://api.snapcraft.io/api/v1/snaps/details/snapcraft' | jq '.download_url' -r) --output snapcraft.snap
-RUN mkdir -p /snap/snapcraft
-RUN unsquashfs -d /snap/snapcraft/current snapcraft.snap
+RUN ARCH=$ARCH snap-install.sh snapcraft
 
 # Fix Python3 installation: Make sure we use the interpreter from
 # the snapcraft snap:
@@ -36,10 +32,7 @@ RUN echo 'exec "/snap/snapcraft/current/bin/python3" -m snapcraft "$@"' >> /snap
 RUN chmod +x /snap/bin/snapcraft
 
 # download and extract core24
-RUN curl -L $(curl -H 'X-Ubuntu-Series: 16' -H "X-Ubuntu-Architecture: $ARCH" \
-    'https://api.snapcraft.io/api/v1/snaps/details/core24' | jq '.download_url' -r) --output core24.snap
-RUN mkdir -p /snap/core24
-RUN unsquashfs -d /snap/core24/current core24.snap
+RUN ARCH=$ARCH snap-install.sh core24
 
 FROM ubuntu:noble
 ENV DEBIAN_FRONTEND=noninteractive
@@ -50,7 +43,8 @@ COPY --from=builder /snap/snapcraft /snap/snapcraft
 COPY --from=builder /snap/bin/snapcraft /snap/bin/snapcraft
 
 # Generate locale and install dependencies.
-RUN apt-get update && apt-get dist-upgrade --yes && apt-get install --yes snapd sudo locales git binutils && locale-gen en_US.UTF-8
+RUN apt-get update && apt-get dist-upgrade --yes && apt-get install --yes snapd sudo locales git binutils curl jq squashfs-tools && locale-gen en_US.UTF-8
+ADD ./snap-install.sh /usr/bin/snap-install.sh
 RUN mkdir /snap/snapcraft/current/usr/share/snapcraft/keyrings \
     /snap/snapcraft/current/usr/share/snapcraft/extensions \
     /snap/snapcraft/current/usr/share/snapcraft/plugins \
