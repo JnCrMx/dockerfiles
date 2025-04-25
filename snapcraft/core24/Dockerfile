@@ -45,10 +45,8 @@ COPY --from=builder /snap/bin/snapcraft /snap/bin/snapcraft
 # Generate locale and install dependencies.
 RUN apt-get update && apt-get dist-upgrade --yes && apt-get install --yes snapd sudo locales git binutils curl jq squashfs-tools && locale-gen en_US.UTF-8
 ADD ./snap-install.sh /usr/bin/snap-install.sh
-RUN mkdir /snap/snapcraft/current/usr/share/snapcraft/keyrings \
-    /snap/snapcraft/current/usr/share/snapcraft/extensions \
-    /snap/snapcraft/current/usr/share/snapcraft/plugins \
-    /snap/snapcraft/current/usr/share/snapcraft/schema -p
+RUN (BASE_DIR="/snap/snapcraft/current/lib/python3.12/site-packages" && \
+    mkdir -p $BASE_DIR/keyrings $BASE_DIR/schema $BASE_DIR/plugins $BASE_DIR/extensions)
 # Set the proper environment.
 ENV LANG="en_US.UTF-8"
 ENV LANGUAGE="en_US:en"
