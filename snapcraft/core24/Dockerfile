@@ -22,7 +22,7 @@ RUN ARCH=$TARGETARCH NO_MOUNT=1 snap-install.sh snapcraft
 # the snapcraft snap:
 RUN unlink /snap/snapcraft/current/usr/bin/python3
 RUN ln -s /snap/snapcraft/current/usr/bin/python3.* /snap/snapcraft/current/usr/bin/python3
-RUN echo /snap/snapcraft/current/lib/python3.*/site-packages >> /snap/snapcraft/current/usr/lib/python3/dist-packages/site-packages.pth
+#RUN echo /snap/snapcraft/current/lib/python3.*/site-packages >> /snap/snapcraft/current/usr/lib/python3/dist-packages/site-packages.pth
 
 # Create a snapcraft runner
 RUN mkdir -p /snap/bin
