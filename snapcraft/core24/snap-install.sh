@@ -29,18 +29,26 @@ fi
 
 SNAPNAME=$1
 
+mkdir -p /var/lib/snapd/snaps
+
 url="$(curl -s -H 'X-Ubuntu-Series: 16' -H "X-Ubuntu-Architecture: $ARCH" "https://api.snapcraft.io/api/v1/snaps/details/$SNAPNAME" | jq '.download_url' -r)"
-curl -L -H 'X-Ubuntu-Series: 16' -H "X-Ubuntu-Architecture: $ARCH" "$url" -o "$SNAPNAME.snap"
+curl -L -H 'X-Ubuntu-Series: 16' -H "X-Ubuntu-Architecture: $ARCH" "$url" -o /var/lib/snapd/snaps/"$SNAPNAME.snap"
 if [ $? -ne 0 ]; then
   echo "Failed to download $SNAPNAME"
   exit 1
 fi
 
-mkdir -p /snap/"$SNAPNAME"
-unsquashfs -d /snap/$SNAPNAME/current $SNAPNAME.snap
-if [ $? -ne 0 ]; then
-  echo "Failed to unsquash $SNAPNAME"
-  exit 1
-fi
+mkdir -p /snap/"$SNAPNAME"/current
 
-rm $SNAPNAME.snap
+mount -t squashfs -o loop /var/lib/snapd/snaps/"$SNAPNAME.snap" /snap/"$SNAPNAME"/current
+if [ $? -ne 0 ]; then
+  echo "Failed to mount $SNAPNAME, unsquashing instead"
+  umount /snap/"$SNAPNAME"/current
+
+  unsquashfs -d /snap/$SNAPNAME/current /var/lib/snapd/snaps/"$SNAPNAME.snap"
+  if [ $? -ne 0 ]; then
+    echo "Failed to unsquash $SNAPNAME"
+    exit 1
+  fi
+fi
+echo "$SNAPNAME installed successfully."
