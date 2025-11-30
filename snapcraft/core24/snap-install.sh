@@ -38,17 +38,29 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-mkdir -p /snap/"$SNAPNAME"/current
+if [ -z "$NO_MOUNT" ]; then
+  echo "Attempting to mount $SNAPNAME..."
+  mkdir -p /snap/"$SNAPNAME"/current
+  mount -t squashfs -o loop /var/lib/snapd/snaps/"$SNAPNAME.snap" /snap/"$SNAPNAME"/current
 
-mount -t squashfs -o loop /var/lib/snapd/snaps/"$SNAPNAME.snap" /snap/"$SNAPNAME"/current
-if [ $? -ne 0 ]; then
-  echo "Failed to mount $SNAPNAME, unsquashing instead"
-  umount /snap/"$SNAPNAME"/current
+  if [ $? -ne 0 ]; then
+    echo "Failed to mount $SNAPNAME, unsquashing instead."
 
+    rmdir /snap/"$SNAPNAME"/current
+    unsquashfs -d /snap/$SNAPNAME/current /var/lib/snapd/snaps/"$SNAPNAME.snap"
+    if [ $? -ne 0 ]; then
+      echo "Failed to unsquash $SNAPNAME"
+      exit 1
+    fi
+  fi
+else
+  echo "\$NO_MOUNT is set. Skipping mount and unsquashing $SNAPNAME instead."
+  mkdir -p /snap/"$SNAPNAME"
   unsquashfs -d /snap/$SNAPNAME/current /var/lib/snapd/snaps/"$SNAPNAME.snap"
   if [ $? -ne 0 ]; then
     echo "Failed to unsquash $SNAPNAME"
     exit 1
   fi
 fi
+
 echo "$SNAPNAME installed successfully."
